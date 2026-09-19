@@ -38,6 +38,20 @@ jobs:
             app:
               - 'services/app/**'
 
+      - name: Show detection result
+        run: |
+          echo "MLFLOW = ${{ steps.filter.outputs.mlflow }}"
+          echo "API = ${{ steps.filter.outputs.api }}"
+          echo "APP = ${{ steps.filter.outputs.app }}"
+          echo ""
+          echo "MLFLOW files:"
+          echo "${{ steps.filter.outputs.mlflow_files }}"
+          echo ""
+          echo "API files:"
+          echo "${{ steps.filter.outputs.api_files }}"
+          echo ""
+          echo "APP files:"
+          echo "${{ steps.filter.outputs.app_files }}"
 
   # ------------------------------------------------------------
   # MLFLOW
