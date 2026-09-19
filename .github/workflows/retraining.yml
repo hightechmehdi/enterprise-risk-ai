@@ -1,6 +1,7 @@
 on:
-  push:           # every time you push new commits
   workflow_dispatch:  # and manually from the Actions tab
+  push:           # every time you push new commits
+
 
 jobs:
   re-training:          # name of the job
