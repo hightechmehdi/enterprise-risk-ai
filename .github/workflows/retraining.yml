@@ -1,10 +1,9 @@
 on:
   push:           # every time you push new commits
-    branches: []
   workflow_dispatch:  # and manually from the Actions tab
 
 jobs:
-  door-dash:          # name of the job
+  re-training:          # name of the job
     runs-on: ubuntu-latest   # GitHub provides an Ubuntu VM
 
     steps:

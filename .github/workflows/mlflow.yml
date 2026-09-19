@@ -1,7 +1,6 @@
 name: Build MLflow
 
-on:
-  push:      
+on:     
   workflow_call:
 
 jobs:
