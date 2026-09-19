@@ -73,3 +73,51 @@ Data
 - `src/retraining/` - retraining pipeline
 - `tests/` - automated tests
 - `.github/workflows/` - CI/CD and retraining workflows
+
+## Environnement et fonctionnement avec les branches de dev personnalisées
+### creation de l'environnement 
+
+```
+conda create -n LLMops python=3.12 -y
+conda activate LLMops
+
+contenu du fichier requirements.txt :
+ragas
+langchain-core>=0.2,<0.3
+langchain-openai>=0.1,<0.2
+openai
+
+pandas
+numpy
+matplotlib
+
+tabulate
+python-dotenv
+ipykernel
+
+
+puis:
+pip install --upgrade pip
+pip install --no-cache-dir -r requirements.txt
+```
+
+
+## fonctionnement avec les branches de dev individuelles
+### commit et push - sur une branche existante
+git checkout dev_franck
+git add -A .
+git status # contrôle des fichiers inclus dans le stage qui seront commités
+git commit -m "Mon super commentaire parlant"
+git push
+
+### rafraichir la branche de dev avec la main
+```
+git checkout main
+git pull origin main
+
+git checkout dev_franck
+git merge main
+
+git push origin dev_franck
+
+```

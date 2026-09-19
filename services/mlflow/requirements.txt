@@ -1,0 +1,4 @@
+mlflow==3.5.0
+anyio<4.15
+psycopg2-binary==2.9.10
+boto3

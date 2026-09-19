@@ -1,0 +1,21 @@
+name: Build API
+
+on:
+  workflow_call:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build FastAPI Docker image
+        run: |
+          echo "Build API"
+          docker build \
+            -t api:${{ github.sha }} \
+            ./services/api
+

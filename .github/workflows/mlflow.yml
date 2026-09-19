@@ -1,0 +1,21 @@
+name: Build MLflow
+
+on:
+  push:      
+  workflow_call:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build MLflow Docker image
+        run: |
+          echo "Build MLflow"
+          docker build \
+            -t mlflow:${{ github.sha }} \
+            ./services/mlflow

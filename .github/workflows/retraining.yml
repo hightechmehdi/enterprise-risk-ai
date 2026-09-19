@@ -1,0 +1,14 @@
+on:
+  push:           # every time you push new commits
+    branches: []
+  workflow_dispatch:  # and manually from the Actions tab
+
+jobs:
+  door-dash:          # name of the job
+    runs-on: ubuntu-latest   # GitHub provides an Ubuntu VM
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Print greeting
+        run: echo "👋 github Actions de re-entrainement sur la branche ${{ github.ref_name }}"

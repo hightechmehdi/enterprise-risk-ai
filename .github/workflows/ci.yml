@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+
+  # ------------------------------------------------------------
+  # Détection des images Docker ayant des fichiers modifiés
+  # ------------------------------------------------------------
+  detect:
+    runs-on: ubuntu-latest
+
+    outputs:
+      mlflow: ${{ steps.filter.outputs.mlflow }}
+      api: ${{ steps.filter.outputs.api }}
+      app: ${{ steps.filter.outputs.app }}
+
+    steps:
+      - name: Print greeting
+        run: echo "👋 github Actions de build des images docker sur la branche ${{ github.ref_name }}"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect changed Docker images
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            mlflow:
+              - 'services/mlflow/**'
+
+            api:
+              - 'services/api/**'
+
+            app:
+              - 'services/app/**'
+
+
+  # ------------------------------------------------------------
+  # MLFLOW
+  # ------------------------------------------------------------
+  build-mlflow:
+    needs: detect
+    if: needs.detect.outputs.mlflow == 'true'
+    uses: ./.github/workflows/mlflow.yml
+
+
+  # ------------------------------------------------------------
+  # API
+  # ------------------------------------------------------------
+  build-api:
+    needs: detect
+    if: needs.detect.outputs.api == 'true'
+    uses: ./.github/workflows/api.yml
+
+
+  # ------------------------------------------------------------
+  # APP
+  # ------------------------------------------------------------
+  build-app:
+    needs: detect
+    if: needs.detect.outputs.app == 'true'
+    uses: ./.github/workflows/app.yml
