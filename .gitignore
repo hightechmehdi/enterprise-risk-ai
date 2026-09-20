@@ -39,3 +39,10 @@ data/processed/*
 # Monitoring batches
 data/monitoring/*
 !data/monitoring/.gitkeep
+
+# franck custom ignores
+secrets*.sh
+.env
+__pycache__/
+*.pyc
+.vscode/

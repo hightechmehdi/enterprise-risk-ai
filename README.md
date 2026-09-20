@@ -78,23 +78,22 @@ Data
 ### creation de l'environnement 
 
 ```
-conda create -n LLMops python=3.12 -y
-conda activate LLMops
+conda create -n enterprise-risk-ai python=3.12 -y
+conda activate enterprise-risk-ai
 
 contenu du fichier requirements.txt :
-ragas
-langchain-core>=0.2,<0.3
-langchain-openai>=0.1,<0.2
-openai
-
-pandas
-numpy
-matplotlib
-
-tabulate
-python-dotenv
-ipykernel
-
+numpy==2.3.5
+pandas==2.3.3
+scikit-learn==1.9.1
+xgboost==3.4.1
+mlflow==3.16.1
+fastapi==0.141.1
+uvicorn==0.53.0
+pydantic==2.13.5
+httpx==0.28.1
+pytest==9.1.1
+evidently==0.7.23
+boto3==1.43.98
 
 puis:
 pip install --upgrade pip

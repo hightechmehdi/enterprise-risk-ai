@@ -1,6 +1,0 @@
-secrets*.sh
-.env
-__pycache__/
-*.pyc
-.vscode/
-notes.txt
