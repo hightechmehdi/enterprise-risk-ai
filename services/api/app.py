@@ -62,17 +62,25 @@ def health(request: Request):
         "model_id": getattr(request.app.state, "model_id", None),
     }
 
-
 @app.post("/predict")
 def predict(request: Request, features: IrisFeatures):
-    X = [[
-        features.sepal_length,
-        features.sepal_width,
-        features.petal_length,
-        features.petal_width,
-    ]]
+
+    X = pd.DataFrame([{
+        "sepal length (cm)": features.sepal_length,
+        "sepal width (cm)": features.sepal_width,
+        "petal length (cm)": features.petal_length,
+        "petal width (cm)": features.petal_width,
+    }])
+
     prediction = request.app.state.model.predict(X)[0]
-    return {"prediction": CLASS_NAMES[int(prediction)]}
+
+    return {
+        "prediction": CLASS_NAMES[int(prediction)],
+        "prediction_id": int(prediction),
+        "model_id": getattr(request.app.state, "model_id", None),
+        "model_source": getattr(request.app.state, "model_source", None),
+    }
+
 
 @app.post("/reload")
 def reload_model(request: Request):
