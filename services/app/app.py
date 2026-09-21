@@ -6,8 +6,8 @@ import streamlit as st
 API_BASE_URL = os.getenv("FASTAPI_URL").rstrip("/")
 TIMEOUT = 15
 
-st.set_page_config(page_title="Iris classifier", page_icon="🌸", layout="centered")
-st.title("🌸 Iris classifier")
+st.set_page_config(page_title="Enterprise Risk Bankruptcy Prediction", page_icon="📉", layout="centered")
+st.title("📉 Enterprise Risk Bankruptcy Prediction")
 st.caption(f"API FastAPI : {API_BASE_URL}")
 
 
@@ -49,20 +49,22 @@ st.header("Prédiction")
 with st.form("prediction_form"):
     col1, col2 = st.columns(2)
     with col1:
-        sepal_length = st.number_input("Longueur du sépale (cm)", min_value=0.0, value=5.1, step=0.1)
-        sepal_width = st.number_input("Largeur du sépale (cm)", min_value=0.0, value=3.5, step=0.1)
+        quick_ratio = st.number_input("Quick Ratio", min_value=0.0, value=5.1, step=0.1)
+        roa_before_interest_and_depreciation_after_tax = st.number_input("ROA(B) before interest and depreciation after tax", min_value=0.0, value=3.5, step=0.1)
+        borrowing_dependency = st.number_input("Borrowing dependency", min_value=0.0, value=0.0, step=0.1)
     with col2:
-        petal_length = st.number_input("Longueur du pétale (cm)", min_value=0.0, value=1.4, step=0.1)
-        petal_width = st.number_input("Largeur du pétale (cm)", min_value=0.0, value=0.2, step=0.1)
+        research_and_development_expense_rate = st.number_input("Research and development expense rate", min_value=0.0, value=1.4, step=0.1)
+        quick_assets_current_liability = st.number_input("Quick assets/Current Liability", min_value=0.0, value=0.2, step=0.1)
 
     predict_clicked = st.form_submit_button("Prédire", use_container_width=True)
 
 if predict_clicked:
     payload = {
-        "sepal_length": sepal_length,
-        "sepal_width": sepal_width,
-        "petal_length": petal_length,
-        "petal_width": petal_width,
+        "quick_ratio": quick_ratio,
+        "roa_before_interest_and_depreciation_after_tax": roa_before_interest_and_depreciation_after_tax,
+        "borrowing_dependency": borrowing_dependency,
+        "research_and_development_expense_rate": research_and_development_expense_rate,
+        "quick_assets_current_liability": quick_assets_current_liability,
     }
     data, error = call_api("POST", "/predict", json=payload)
     if error:

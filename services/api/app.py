@@ -19,7 +19,7 @@ MODEL_ALIAS = os.getenv("MODEL_ALIAS")
 model_uri = f"models:/{MODEL_NAME}@{MODEL_ALIAS}"
 
 
-CLASS_NAMES = ["setosa", "versicolor", "virginica"]
+CLASS_NAMES = ["Bankrupt?"]
 
 
 def load_model():
@@ -44,13 +44,14 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Iris classifier", lifespan=lifespan)
+app = FastAPI(title="Enterprise Risk AI", lifespan=lifespan)
 
-class IrisFeatures(BaseModel):
-    sepal_length: float
-    sepal_width: float
-    petal_length: float
-    petal_width: float
+class FeaturesEnterpriseRiskAi(BaseModel):
+    quick_ratio: float
+    roa_before_interest_and_depreciation_after_tax: float
+    borrowing_dependency: float
+    research_and_development_expense_rate: float
+    quick_assets_current_liability: float
 
 
 @app.get("/health")
@@ -63,13 +64,14 @@ def health(request: Request):
     }
 
 @app.post("/predict")
-def predict(request: Request, features: IrisFeatures):
+def predict(request: Request, features: FeaturesEnterpriseRiskAi):
 
     X = pd.DataFrame([{
-        "sepal length (cm)": features.sepal_length,
-        "sepal width (cm)": features.sepal_width,
-        "petal length (cm)": features.petal_length,
-        "petal width (cm)": features.petal_width,
+        "Quick Ratio": features.quick_ratio,
+        "ROA(B) before interest and depreciation after tax": features.roa_before_interest_and_depreciation_after_tax,
+        "Borrowing dependency": features.borrowing_dependency,
+        "Research and development expense rate": features.research_and_development_expense_rate,
+        "Quick Assets/Current Liability": features.quick_assets_current_liability,
     }])
 
     prediction = request.app.state.model.predict(X)[0]
