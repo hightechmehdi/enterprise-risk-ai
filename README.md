@@ -104,19 +104,22 @@ pip install --no-cache-dir -r requirements.txt
 ## fonctionnement avec les branches de dev individuelles
 ### commit et push - sur une branche existante
 git checkout dev_franck
+git pull
 git add -A .
 git status # contrôle des fichiers inclus dans le stage qui seront commités
 git commit -m "Mon super commentaire parlant"
-git push
+git push # ou git push origin dev_franck
 
 ### rafraichir la branche de dev avec la main
 ```
+## rafraichissement de la branche main locale
 git checkout main
 git pull origin main
-
+## merge de la branche dev_franck locale avec les commits de la branche main
 git checkout dev_franck
+git pull
 git merge main
-
-git push origin dev_franck
+## rafraichissement de la branche dev_franck distante
+git push # ou git push origin dev_franck
 
 ```
