@@ -1,0 +1,6 @@
+```
+export BACKEND_STORE_URI=postgresql://..........
+export ARTIFACT_ROOT=s3://......
+export AWS_ACCESS_KEY_ID=xxxxxxxxxxx
+export AWS_SECRET_ACCESS_KEY=yyyyyyyyyyyy
+```
