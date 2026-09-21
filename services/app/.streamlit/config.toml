@@ -1,0 +1,14 @@
+[browser]
+serverAddress = '0.0.0.0'
+
+[server]
+runOnSave = false
+fileWatcherType = "poll"
+port = 8515
+
+[global]
+dataFrameSerialization = "legacy"
+
+[theme]
+base="dark"
+primaryColor="#4be8e0"

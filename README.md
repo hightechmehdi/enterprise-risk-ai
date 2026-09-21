@@ -73,3 +73,53 @@ Data
 - `src/retraining/` - retraining pipeline
 - `tests/` - automated tests
 - `.github/workflows/` - CI/CD and retraining workflows
+
+## Environnement et fonctionnement avec les branches de dev personnalisées
+### creation de l'environnement 
+
+```
+conda create -n enterprise-risk-ai python=3.12 -y
+conda activate enterprise-risk-ai
+
+contenu du fichier requirements.txt :
+numpy==2.3.5
+pandas==2.3.3
+scikit-learn==1.9.1
+xgboost==3.4.1
+mlflow==3.16.1
+fastapi==0.141.1
+uvicorn==0.53.0
+pydantic==2.13.5
+httpx==0.28.1
+pytest==9.1.1
+evidently==0.7.23
+boto3==1.43.98
+
+puis:
+pip install --upgrade pip
+pip install --no-cache-dir -r requirements.txt
+```
+
+
+## fonctionnement avec les branches de dev individuelles
+### commit et push - sur une branche existante
+git checkout dev_franck
+git pull
+git add -A .
+git status # contrôle des fichiers inclus dans le stage qui seront commités
+git commit -m "Mon super commentaire parlant"
+git push # ou git push origin dev_franck
+
+### rafraichir la branche de dev avec la main
+```
+## rafraichissement de la branche main locale
+git checkout main
+git pull origin main
+## merge de la branche dev_franck locale avec les commits de la branche main
+git checkout dev_franck
+git pull
+git merge main
+## rafraichissement de la branche dev_franck distante
+git push # ou git push origin dev_franck
+
+```
