@@ -51,12 +51,12 @@ from src.evaluation.evaluate import evaluate_model
 
 RANDOM_STATE = 42
 N_SPLITS = 5
-EXPERIMENT_NAME=os.environ["EXPERIMENT_NAME"]
 MODEL_NAME = "prod-mlflow-server"
 
 PRIMARY_METRIC = "average_precision"
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+SRC_DIR = PROJECT_ROOT / "src"
 
 CSV_PATH = (
     PROJECT_ROOT
@@ -403,6 +403,7 @@ def train_candidates(
                 input_example=input_example,
                 registered_model_name=MODEL_NAME,
                 serialization_format="cloudpickle",
+                code_paths=[str(SRC_DIR)],
             )
 
             # ------------------------------------------------

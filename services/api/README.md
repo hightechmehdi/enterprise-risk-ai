@@ -5,3 +5,14 @@ export MLFLOW_TRACKING_URI="https://mlflow-for-enterprise-risk-ai-cccccccccccccc
 export MODEL_NAME="recette-mlflow-server"
 export MODEL_ALIAS="recette-champion"
 ```
+
+
+'Quick Ratio'
+'ROA(B) before interest and depreciation after tax'
+'Borrowing dependency'
+'Research and development expense rate'
+'Quick Assets/Current Liability'
+
+
+
+TARGET = "Bankrupt?"
