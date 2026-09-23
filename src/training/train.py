@@ -67,6 +67,8 @@ CSV_PATH = (
 
 MLFLOW_EXPERIMENT = "EnterpriseRisk_Model_Selection"
 
+MODEL_ALIAS = os.getenv("MODEL_ALIAS", "champion")
+
 
 # ============================================================
 # CROSS-VALIDATION
@@ -633,8 +635,8 @@ def main():
     client = mlflow.MlflowClient()
     versions = client.search_model_versions(f"name='{MODEL_NAME}'")
     last_version = max(int(v.version) for v in versions)
-    client.set_registered_model_alias(MODEL_NAME, "champion", last_version)
-    print(f"Modèle '{MODEL_NAME}' version {last_version} enregistré avec l'alias @champion")
+    client.set_registered_model_alias(MODEL_NAME, MODEL_ALIAS, last_version)
+    print(f"Modèle '{MODEL_NAME}' version {last_version} enregistré avec l'alias @{MODEL_ALIAS}")
 
 # ============================================================
 # EXECUTION
