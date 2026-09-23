@@ -31,8 +31,6 @@ Usage :
 
 import argparse
 import json
-import os
-from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -41,8 +39,6 @@ from evidently.presets import DataDriftPreset
 
 from src.data.features import SELECTED_FEATURES
 from src.data.preprocess import prepare_dataset
-from src.monitoring.evidently_ui import log_snapshot
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 CSV_PATH = PROJECT_ROOT / "data" / "raw" / "data.csv"
@@ -92,22 +88,9 @@ def generate_prod_batches(X_test: pd.DataFrame) -> list:
     return paths
 
 
-def run_drift_report(
-    reference: pd.DataFrame,
-    current: pd.DataFrame,
-    scenario: str,
-    timestamp: datetime | None = None,
-    log_ui: bool = False,
-) -> dict:
+def run_drift_report(reference: pd.DataFrame, current: pd.DataFrame, scenario: str) -> dict:
     report = Report([DataDriftPreset(drift_share=DRIFT_SHARE, num_method=DRIFT_METHOD)])
-    snapshot = report.run(
-        current_data=current, reference_data=reference, timestamp=timestamp, name=scenario
-    )
-
-    # Historique consultable dans l'interface web Evidently
-    if log_ui:
-        project_id = log_snapshot(snapshot, list(reference.columns))
-        print(f"Rapport envoyé au projet Evidently {project_id}")
+    snapshot = report.run(current_data=current, reference_data=reference)
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     html_path = OUTPUT_DIR / f"drift_{scenario}.html"
@@ -142,8 +125,6 @@ def main():
     parser.add_argument("--current-csv", type=Path, help="lot de production à contrôler")
     parser.add_argument("--scenario", choices=["normal", "shock"], default="shock",
                         help="sans --current-csv : lot simulé à la volée")
-    parser.add_argument("--no-ui", action="store_true", help="n'envoie pas le rapport à Evidently UI")
-
     args = parser.parse_args()
 
     X_train, X_test, _, _ = prepare_dataset(CSV_PATH, features=SELECTED_FEATURES)
@@ -157,14 +138,11 @@ def main():
         batch = pd.read_csv(args.current_csv)
         current = batch[SELECTED_FEATURES]          # on ne compare que les 5 ratios du modèle
         label = args.current_csv.stem
-        # Date du lot = mois de scoring -> axe du temps dans le tableau de bord
-        timestamp = pd.to_datetime(batch["scoring_month"].iloc[0]).to_pydatetime()
     else:
         current = X_test if args.scenario == "normal" else simulate_liquidity_shock(X_test)
         label = args.scenario
-        timestamp = None
 
-    s = run_drift_report(X_train, current, label, timestamp=timestamp, log_ui=not args.no_ui)
+    s = run_drift_report(X_train, current, label)
 
     print("\n" + "=" * 60)
     print(f"MONITORING - lot : {s['scenario']}")
@@ -177,14 +155,6 @@ def main():
     print(f"DRIFT GLOBAL : {'OUI -> analyser et envisager un retraining' if s['dataset_drift'] else 'NON'}")
     print(f"Rapport : {s['html_report']}")
 
-
-    # Expose le résultat aux steps suivants de GitHub Actions
-    gh_output = os.getenv("GITHUB_OUTPUT")
-    if gh_output:
-        with open(gh_output, "a") as fp:
-            fp.write(f"drift_share={s['drifted_share']:.4f}\n")
-            fp.write(f"drifted_columns={s['drifted_columns']}\n")
-            fp.write(f"drift_detected={'true' if s['dataset_drift'] else 'false'}\n")
 
 if __name__ == "__main__":
     main()
