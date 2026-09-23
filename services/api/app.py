@@ -13,6 +13,7 @@ import os
 MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI")
 MODEL_NAME = os.getenv("MODEL_NAME")
 MODEL_ALIAS = os.getenv("MODEL_ALIAS")
+threshold = float(os.getenv("THRESHOLD", 0.50))
 
 # mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 # Chargé une seule fois au démarrage du process
@@ -84,8 +85,6 @@ def predict(request: Request, features: FeaturesEnterpriseRiskAi):
     probas = model.predict_proba(X)[0]
     proba_0 = float(probas[0])
     proba_1 = float(probas[1])
-
-    threshold = 0.50
     prediction = int(proba_1 >= threshold)
     
     # Trouver la colonne correspondant à la classe prédite
