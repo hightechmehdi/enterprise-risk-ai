@@ -1,5 +1,17 @@
 on:
   workflow_dispatch:  # and manually from the Actions tab
+    inputs:
+      model_alias:
+        description: "Alias MLflow du modèle entraîné"
+        type: choice
+        options: [champion, challenger]
+        default: champion
+  workflow_call:      # appelé par monitoring.yml quand un drift est détecté
+    inputs:
+      model_alias:
+        type: string
+        default: challenger
+
 
 jobs:
   re-training:          # name of the job
@@ -11,6 +23,8 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
       EXPERIMENT_NAME: ${{ secrets.EXPERIMENT_NAME }}
       PYTHONPATH: ${{ github.workspace }}
+      MODEL_ALIAS: ${{ inputs.model_alias || 'champion' }}
+
 
     steps:
       - uses: actions/checkout@v4
