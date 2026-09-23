@@ -1,4 +1,4 @@
-name: Build API
+name: Build APP
 
 on:
   workflow_call:
@@ -14,8 +14,8 @@ jobs:
 
       - name: Build APP Streamlit Docker image
         run: |
-          echo "Build API"
+          echo "Build APP"
           docker build \
-            -t api:${{ github.sha }} \
-            ./services/api
+            -t app:${{ github.sha }} \
+            ./services/app
 
