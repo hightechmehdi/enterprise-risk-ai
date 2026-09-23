@@ -6,7 +6,6 @@ from fastapi import FastAPI, Request
 from pydantic import BaseModel
 import mlflow.sklearn
 import mlflow
-import mlflow.pyfunc
 import pandas as pd
 import os
 
