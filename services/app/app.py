@@ -49,12 +49,12 @@ st.header("Prédiction")
 with st.form("prediction_form"):
     col1, col2 = st.columns(2)
     with col1:
-        quick_ratio = st.number_input("Quick Ratio", min_value=0.0, value=5.1, step=0.1)
-        roa_before_interest_and_depreciation_after_tax = st.number_input("ROA(B) before interest and depreciation after tax", min_value=0.0, value=3.5, step=0.1)
-        borrowing_dependency = st.number_input("Borrowing dependency", min_value=0.0, value=0.0, step=0.1)
+        quick_ratio = st.number_input("Quick Ratio (liquidité immédiate)", min_value=0.0, value=5.1, step=0.1)
+        roa_before_interest_and_depreciation_after_tax = st.number_input("ROA(B) before interest and depreciation after tax (rentabilité des actifs)", min_value=0.0, value=3.5, step=0.1)
+        borrowing_dependency = st.number_input("Borrowing dependency (dépendance à l'emprunt)", min_value=0.0, value=0.0, step=0.1)
     with col2:
-        research_and_development_expense_rate = st.number_input("Research and development expense rate", min_value=0.0, value=1.4, step=0.1)
-        quick_assets_current_liability = st.number_input("Quick assets/Current Liability", min_value=0.0, value=0.2, step=0.1)
+        research_and_development_expense_rate = st.number_input("Research and development expense rate (taux de dépenses en R&D)", min_value=0.0, value=1.4, step=0.1)
+        quick_assets_current_liability = st.number_input("Quick assets/Current Liability (actifs liquides / dettes court terme)", min_value=0.0, value=0.2, step=0.1)
 
     predict_clicked = st.form_submit_button("Prédire", use_container_width=True)
 

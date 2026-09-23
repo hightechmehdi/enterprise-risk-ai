@@ -4,6 +4,7 @@ from http.client import HTTPException
 from xml.parsers.expat import model
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
+import mlflow.sklearn
 import mlflow
 import mlflow.pyfunc
 import pandas as pd
@@ -29,8 +30,9 @@ def load_model():
     if MLFLOW_TRACKING_URI and MODEL_NAME and MODEL_ALIAS:
         mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
         model_uri = f"models:/{MODEL_NAME}@{MODEL_ALIAS}"
-        model = mlflow.pyfunc.load_model(model_uri)
-        model_id = getattr(model.metadata, "model_id", None)
+        model = mlflow.sklearn.load_model(model_uri)
+        model_info = mlflow.models.get_model_info(model_uri)
+        model_id = getattr(model_info, "model_id", None)
         return model, model_uri, model_id
     raise RuntimeError(
         f"""Aucun modèle disponible : renseignez MLFLOW_TRACKING_URI et MODEL_NAME et MODEL_ALIAS
@@ -77,7 +79,20 @@ def predict(request: Request, features: FeaturesEnterpriseRiskAi):
         "Quick Assets/Current Liability": features.quick_assets_current_liability,
     }])
 
-    prediction = int(request.app.state.model.predict(X)[0])
+    # prediction = int(request.app.state.model.predict(X)[0])
+
+    model = request.app.state.model
+    probas = model.predict_proba(X)[0]
+    proba_0 = float(probas[0])
+    proba_1 = float(probas[1])
+
+    threshold = 0.50
+    prediction = int(proba_1 >= threshold)
+    
+    # Trouver la colonne correspondant à la classe prédite
+    class_index = list(request.app.state.model.classes_).index(prediction)
+    probability = float(probas[class_index])
+
     # Vérification que la prédiction est bien dans les classes attendues
     if prediction not in range(len(CLASS_NAMES)):
         raise ValueError(
@@ -87,10 +102,14 @@ def predict(request: Request, features: FeaturesEnterpriseRiskAi):
     return {
         "prediction": CLASS_NAMES[prediction],
         "prediction_id": prediction,
-        "probabilité": float(request.app.state.model.predict_proba(X)[0][prediction]),
+        "probabilité classe prédite": round(proba_1,4),
+        "probabilité_0": round(proba_0,4),
+        "probabilité_1": round(proba_1,4),
+        "threshold": threshold,
         "model_id": getattr(request.app.state, "model_id", None),
         "model_source": getattr(request.app.state, "model_source", None),
     }
+
 
 
 @app.post("/reload")
