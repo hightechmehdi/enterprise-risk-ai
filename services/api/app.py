@@ -87,6 +87,7 @@ def predict(request: Request, features: FeaturesEnterpriseRiskAi):
     return {
         "prediction": CLASS_NAMES[prediction],
         "prediction_id": prediction,
+        "probabilité": float(request.app.state.model.predict_proba(X)[0][prediction]),
         "model_id": getattr(request.app.state, "model_id", None),
         "model_source": getattr(request.app.state, "model_source", None),
     }
