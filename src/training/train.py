@@ -67,7 +67,7 @@ CSV_PATH = (
 
 MLFLOW_EXPERIMENT = "EnterpriseRisk_Model_Selection"
 
-MODEL_ALIAS = os.getenv("MODEL_ALIAS", "champion")
+MODEL_ALIAS = os.getenv("MODEL_ALIAS", "challenger")
 
 
 # ============================================================

@@ -100,7 +100,7 @@ def predict(request: Request, features: FeaturesEnterpriseRiskAi):
     return {
         "prediction": CLASS_NAMES[prediction],
         "prediction_id": prediction,
-        "probabilité classe prédite": round(proba_1,4),
+        "probabilité classe prédite": round(probability,4),
         "probabilité_0": round(proba_0,4),
         "probabilité_1": round(proba_1,4),
         "threshold": threshold,
