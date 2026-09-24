@@ -2,7 +2,8 @@ name: Drift monitoring
 
 on:
   schedule:
-    - cron: "0 6 * * *"   # tous les jours à 06:00 UTC (branche par défaut uniquement)
+    - cron: "0 8 * * *"
+      timezone: "Europe/Paris"
   workflow_dispatch:       # lancement manuel depuis l'onglet Actions
     inputs:
       scenario:
