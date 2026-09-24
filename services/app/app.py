@@ -46,15 +46,28 @@ if st.button("Vérifier /health", use_container_width=True):
 st.divider()
 st.header("Prédiction")
 
+# Deux entreprises réelles du jeu de test (jamais vues à l'entraînement)
+EXAMPLES = {
+    "Entreprise saine": {
+        "qr": 0.02760, "roa": 0.62514, "bd": 0.36964, "rd": 0.00011, "qa": 0.02866,
+    },
+    "Entreprise en faillite": {
+        "qr": 0.00036, "roa": 0.46207, "bd": 0.38052, "rd": 0.00000, "qa": 0.00040,
+    },
+}
+choice = st.radio("Exemple pré-rempli (jeu de test)", list(EXAMPLES), horizontal=True)
+ex = EXAMPLES[choice]
+fmt = {"min_value": 0.0, "step": 0.0001, "format": "%.5f"}
+
 with st.form("prediction_form"):
     col1, col2 = st.columns(2)
     with col1:
-        quick_ratio = st.number_input("Quick Ratio (liquidité immédiate)", min_value=0.0, value=5.1, step=0.1)
-        roa_before_interest_and_depreciation_after_tax = st.number_input("ROA(B) before interest and depreciation after tax (rentabilité des actifs)", min_value=0.0, value=3.5, step=0.1)
-        borrowing_dependency = st.number_input("Borrowing dependency (dépendance à l'emprunt)", min_value=0.0, value=0.0, step=0.1)
+        quick_ratio = st.number_input("Quick Ratio (liquidité immédiate)", value=ex["qr"], key=f"qr_{choice}", **fmt)
+        roa_before_interest_and_depreciation_after_tax = st.number_input("ROA(B) before interest and depreciation after tax (rentabilité des actifs)", value=ex["roa"], key=f"roa_{choice}", **fmt)
+        borrowing_dependency = st.number_input("Borrowing dependency (dépendance à l'emprunt)", value=ex["bd"], key=f"bd_{choice}", **fmt)
     with col2:
-        research_and_development_expense_rate = st.number_input("Research and development expense rate (taux de dépenses en R&D)", min_value=0.0, value=1.4, step=0.1)
-        quick_assets_current_liability = st.number_input("Quick assets/Current Liability (actifs liquides / dettes court terme)", min_value=0.0, value=0.2, step=0.1)
+        research_and_development_expense_rate = st.number_input("Research and development expense rate (taux de dépenses en R&D)", value=ex["rd"], key=f"rd_{choice}", **fmt)
+        quick_assets_current_liability = st.number_input("Quick assets/Current Liability (actifs liquides / dettes court terme)", value=ex["qa"], key=f"qa_{choice}", **fmt)
 
     predict_clicked = st.form_submit_button("Prédire", use_container_width=True)
 
@@ -71,9 +84,16 @@ if predict_clicked:
         st.error(f"Erreur /predict : {error}")
     else:
         prediction = data.get("prediction")
-        if prediction is not None:
+    if prediction is not None:
+        score = data.get("probabilité_1")
+        if score is not None:
+            st.metric("Score de risque (non calibré)", f"{score:.2f}",
+                help=f"Seuil de décision : {data.get('threshold')}")
+        if data.get("prediction_id") == 1:
+            st.error(f"Prédiction : {prediction}")
+        else:
             st.success(f"Prédiction : {prediction}")
-        st.json(data)
+    st.json(data)
 
 st.divider()
 st.header("Administration du modèle")
