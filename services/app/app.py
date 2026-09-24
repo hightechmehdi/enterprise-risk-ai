@@ -84,16 +84,16 @@ if predict_clicked:
         st.error(f"Erreur /predict : {error}")
     else:
         prediction = data.get("prediction")
-    if prediction is not None:
-        score = data.get("probabilité_1")
-        if score is not None:
-            st.metric("Score de risque (non calibré)", f"{score:.2f}",
-                help=f"Seuil de décision : {data.get('threshold')}")
-        if data.get("prediction_id") == 1:
-            st.error(f"Prédiction : {prediction}")
-        else:
-            st.success(f"Prédiction : {prediction}")
-    st.json(data)
+        if prediction is not None:
+            score = data.get("probabilité_1")
+            if score is not None:
+                st.metric("Score de risque (non calibré)", f"{score:.2f}",
+                    help=f"Seuil de décision : {data.get('threshold')}")
+            if data.get("prediction_id") == 1:
+                st.error(f"Prédiction : {prediction}")
+            else:
+                st.success(f"Prédiction : {prediction}")
+        st.json(data)
 
 st.divider()
 st.header("Administration du modèle")
