@@ -4,7 +4,11 @@
 
 EnterpriseRisk AI aide une équipe risque à **prioriser** les entreprises à examiner : à partir de 5 ratios financiers, une API renvoie un score de risque de faillite, la décision au seuil choisi et l'identifiant exact du modèle qui l'a produit. Autour du modèle, le projet met en œuvre la chaîne MLOps complète : suivi des expériences, registre de modèles, déploiement continu, détection de drift, réentraînement automatique et promotion sous contrôle humain.
 
-> **Projet de démonstration MLOps** réalisé dans le cadre de la certification Jedha Lead AI (Bloc 4). Ce n'est pas un outil de décision crédit : les données sont historiques, le score n'est pas calibré et aucune validation métier ou réglementaire n'a été conduite. Voir [Limites](#limites).
+> **Projet de démonstration MLOps** 
+réalisé dans le cadre de la certification Jedha Lead AI (Bloc 4).  
+Ce n'est pas un outil de décision crédit : les données sont historiques,   
+le score n'est pas calibré et aucune validation métier ou réglementaire n'a été conduite.  
+Voir les [Limites](#limites).
 
 ---
 
